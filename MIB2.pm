@@ -73,7 +73,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 	
 );
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # ARP constants for ntm_flags (inet/arp.h)
 use constant ACE_F_PERMANENT => 0x1;
@@ -183,7 +183,7 @@ and throughput information.
 
   use Solaris::MIB2 ':all';
 
-  $mib = new Solaris::MIB2 '/dev/ip';
+  $mib = new Solaris::MIB2;
   foreach my $entry ( @{$mib->{ipNetToMediaEntry}} ) {
      print "Device: $entry->{ipNetToMediaIfIndex}\n";
      print "IP Address: $entry->{ipNetToMediaNetAddress}\n";
@@ -205,7 +205,7 @@ read the values, using the hash reference, returned from the 'new' function:
 
    use Solaris::MIB2;
 
-   $mib = new Solaris::MIB2 '/dev/ip';
+   $mib = new Solaris::MIB2;
    print $mib->{tcpInSegs}, $mib->{tcpOutSegs}, "\n";
    ...
 
@@ -225,7 +225,7 @@ shall be used as follows:
    
    use Solaris::MIB2;
 
-   $mib = new Solaris::MIB2 '/dev/ip';
+   $mib = new Solaris::MIB2;
    print $mib->{tcpInSegs}, "\n";
    ...
    $mib->update();
@@ -234,14 +234,15 @@ shall be used as follows:
 
 Internally, Solaris::MIB2 constructs a stack of streams modules for the sole purpose of
 retrieving the MIB data. By default (i.e. if no parameter is passed to the 'new' function)
-it will attempt to open '/dev/tcp' as it doesn't require any special privileges. However,
-'/dev/tcp' streams stack will not contain the arp module, therefore, any arp statistics may
-not be accurate. The best approach is to create an instance of Solaris::MIB2 over the '/dev/ip'
-as follows:
+it will attempt to open '/dev/arp' as it doesn't require any special privileges. The
+'/dev/arp' streams stack seems to contain all the necessary stream modules, therefore, all 
+statistics should be accurate. 
+To make sure that the stack is constructed exactly to your specification, you may want to 
+create an instance of Solaris::MIB2 over the '/dev/ip' as follows:
 
    use Solaris::MIB2;
 
-   $mib = new Solaris::MIB2;
+   $mib = new Solaris::MIB2 '/dev/ip';
 
 On Solaris, however, '/dev/ip' is only accesible by root and members of sys group, therefore the
 script should be run with sufficient level of privileges. One approach is to make every

@@ -4,3 +4,5 @@ Revision history for Perl extension Solaris::MIB2.
 	- original version; created by h2xs 1.21 with options
 		-f -nSolaris::MIB2 -v0.01
 
+0.02  Fri Dec  29 14:24:00 2002
+	- changed default device to /dev/arp (as per Casper Dik, Sun Microsystems)

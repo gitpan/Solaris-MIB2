@@ -262,7 +262,7 @@ MODULE = Solaris::MIB2		PACKAGE = Solaris::MIB2
 PROTOTYPES: ENABLE
 
 SV*
-new(class,device=DEV_TCP)
+new(class,device=DEV_DEFAULT)
    char *class;
    char *device;
 PREINIT:
@@ -291,8 +291,11 @@ CODE:
       fatal( "failed to push TCP_MODULE" );
    if ( ioctl( sd, I_PUSH, UDP_MODULE ) < 0 ) 
       fatal( "failed to push UDP_MODULE" );
+#if defined _PUSH_ICMP
+   /* only works for Solaris 7 onward (as per Casper Dik) */
    if ( ioctl( sd, I_PUSH, ICMP_MODULE ) < 0 ) 
       fatal( "failed to push ICMP_MODULE" );
+#endif
 
    sdsv = newSViv(sd);
    sv_magic(SvRV(RETVAL),sdsv,'~',0,0);

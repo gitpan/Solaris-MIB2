@@ -1,4 +1,5 @@
 use ExtUtils::MakeMaker;
+use Config;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
@@ -15,4 +16,9 @@ WriteMakefile(
     'INC'		=> '', # e.g., '-I/usr/include/other'
 	# Un-comment this if you add C files to link with later:
     # 'OBJECT'		=> '$(O_FILES)', # link all the C files too
+    'CONFIGURE'         => 
+       sub { 
+          return { 'DEFINE' => qq(-D_PUSH_ICMP) } 
+	     if $Config{osvers} >= 2.7; 
+    },
 );

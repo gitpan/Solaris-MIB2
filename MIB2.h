@@ -21,7 +21,7 @@
 #include <inet/mib2.h>
 #include <netinet/igmp_var.h>
 
-#define  DEV_TCP	"/dev/tcp"
+#define  DEV_DEFAULT	"/dev/arp"
 
 #define  ARP_MODULE	"arp"
 #define  TCP_MODULE	"tcp"
